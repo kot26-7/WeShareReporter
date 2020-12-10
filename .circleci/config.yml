@@ -25,6 +25,7 @@ jobs:
           command: |
             docker-compose ps -a
             docker-compose exec web bash -c 'yarn install --check-files'
+            docker-compose ps logs
             docker-compose exec web bash -c 'bundle exec rails db:create'
             docker-compose exec web bash -c 'bundle exec rails db:migrate'
       - run:
