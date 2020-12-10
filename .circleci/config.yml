@@ -1,9 +1,10 @@
+
 version: 2.1
 jobs:
   rspec:
     working_directory: ~/myapp
     docker:
-      - image: circleci/ruby:2.5.8
+      - image: circleci/ruby:2.7.1-buster-node-browsers
     steps:
       - checkout
       - setup_remote_docker
@@ -12,81 +13,88 @@ jobs:
           command: |
             echo "export COMPOSE_FILE=docker-compose.ci.yml" >> $BASH_ENV
       - run:
-          name: Start containers and verify it is working
+          name: Start containers
           command: |
             set -x
             docker-compose up -d
-            docker exec web_app curl -4 --retry 10 --retry-delay 3 --retry-connrefused http://localhost:3000
       - run:
-          name: Create database
-          command: |
-            docker-compose exec web bash -c 'bundle exec rails db:create'
+         name: wait for db
+         command: sleep 100
       - run:
           name: Setup database
           command: |
+            docker-compose exec web bash -c 'bundle exec rails db:create'
             docker-compose exec web bash -c 'bundle exec rails db:migrate'
+      - run:
+          name: yarn Install
+          command: |
+            docker-compose exec web bash -c 'yarn install'
+            docker-compose exec web bash -c 'bundle exec bin/webpack'
       - run:
           name: Run rspec
           command: docker-compose exec web rspec
 
   rubocop:
-      working_directory: ~/myapp
-      docker:
-        - image: circleci/ruby:2.5.8
-      steps:
-        - checkout
-        - restore_cache:
-            keys:
-              - v1-dependencies-{{ checksum "Gemfile.lock" }}
-              - v1-dependencies-
-        - run:
-            name: bundle update
-            command: bundle update --bundler
-        - run: bundle config --local path vendor/bundle
-        - run:
-            name: bundle install
-            command: bundle check || bundle install --jobs=8 --retry=3 --clean
-        - save_cache:
-            key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-            paths:
-              - vendor/bundle
-        - run:
-            name: Run rubocop
-            command: bundle exec rubocop --parallel
+    working_directory: ~/myapp
+    docker:
+      - image: circleci/ruby:2.7.1-buster-node-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - blog-bundle-v1-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
+            - blog-bundle-v1-
+      - run:
+          name: Bundler and Yarn
+          command: |
+            gem install bundler -v '2.1.4' -N
+            bundle -v
+            bundle install --jobs=3 --retry=3 --path vendor/bundle
+            yarn install
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+            - ./node_modules
+          key: blog-bundle-v1-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop --parallel
 
   heroku_deploy:
-      working_directory: ~/myapp
-      docker:
-        - image: sue445/heroku-cli
-      steps:
-        - checkout
-        - build-tools/install-ci-tools
-        - jq/install
-        - run:
-            name: Identify who I am
-            command: echo 'export MY_EMAIL=`heroku auth:whoami | tail -n 1`' >> $BASH_ENV
-        - run:
-            name: Identify Heroku app names to destroy
-            command: echo 'export APP_NAMES_TO_REMOVE=`heroku apps --json | jq -r "map(select(.owner.email == "\"$MY_EMAIL\"" and (.name | contains(\"myapp\")))) | sort_by(.updated_at) | reverse | .[5:] | .[].name"`' >> $BASH_ENV
-        - run:
-            name: Delete old apps if needed
-            command: for app_name in $APP_NAMES_TO_REMOVE; do heroku apps:destroy -a $app_name -c $app_name; done
-        - run:
-            name: Define Heroku app name to create
-            command: timestamp=`date +%Y%m%d%H%M%S` && echo "export HEROKU_APP_NAME=ws-reporter$timestamp" >> $BASH_ENV
-        - run:
-            name: Create fresh Heroku app
-            command: heroku apps:create $HEROKU_APP_NAME
-        - run:
-            name: Deploy
-            command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
-        - run:
-            name: Run post-deploy tasks
-            command: |
-              heroku run bin/rails db:migrate
+    working_directory: ~/myapp
+    docker:
+      - image: sue445/heroku-cli
+    steps:
+      - checkout
+      - build-tools/install-ci-tools
+      - jq/install
+      - run:
+          name: Identify who I am
+          command: echo 'export MY_EMAIL=`heroku auth:whoami | tail -n 1`' >> $BASH_ENV
+      - run:
+          name: Identify Heroku app names to destroy
+          command: echo 'export APP_NAMES_TO_REMOVE=`heroku apps --json | jq -r "map(select(.owner.email == "\"$MY_EMAIL\"" and (.name | contains(\"myapp\")))) | sort_by(.updated_at) | reverse | .[5:] | .[].name"`' >> $BASH_ENV
+      - run:
+          name: Delete old apps if needed
+          command: for app_name in $APP_NAMES_TO_REMOVE; do heroku apps:destroy -a $app_name -c $app_name; done
+      - run:
+          name: Define Heroku app name to create
+          command: timestamp=`date +%Y%m%d%H%M%S` && echo "export HEROKU_APP_NAME=ws-reporter$timestamp" >> $BASH_ENV
+      - run:
+          name: Create fresh Heroku app
+          command: heroku apps:create $HEROKU_APP_NAME --addons=jawsdb:kitefin
+      - run:
+          name: Deploy
+          command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+      - run:
+          name: Run post-deploy tasks
+          command: |
+            heroku config:set ADMIN_USER_EMAIL=$ADMIN_USER_EMAIL ADMIN_USER_PASS=$ADMIN_USER_PASS
+            heroku run bin/rails db:migrate
+            heroku run bin/rails db:seed
 orbs:
-  build-tools: circleci/build-tools@2.6.3
   jq: circleci/jq@1.9.1
+  build-tools: circleci/build-tools@2.6.3
 workflows:
   version: 2.1
   build:
