@@ -19,7 +19,7 @@ jobs:
             docker-compose up -d
       - run:
          name: wait for db
-         command: sleep 100
+         command: sleep 200
       - run:
           name: Setup database
           command: |
