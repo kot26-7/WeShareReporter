@@ -81,16 +81,14 @@ jobs:
           command: timestamp=`date +%Y%m%d%H%M%S` && echo "export HEROKU_APP_NAME=ws-reporter$timestamp" >> $BASH_ENV
       - run:
           name: Create fresh Heroku app
-          command: heroku apps:create $HEROKU_APP_NAME --addons=jawsdb:kitefin
+          command: heroku apps:create $HEROKU_APP_NAME
       - run:
           name: Deploy
           command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
       - run:
           name: Run post-deploy tasks
           command: |
-            heroku config:set ADMIN_USER_EMAIL=$ADMIN_USER_EMAIL ADMIN_USER_PASS=$ADMIN_USER_PASS
             heroku run bin/rails db:migrate
-            heroku run bin/rails db:seed
 orbs:
   jq: circleci/jq@1.9.1
   build-tools: circleci/build-tools@2.6.3
