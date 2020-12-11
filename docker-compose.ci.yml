@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  postgres:
     image: postgres:10.1
     environment:
       POSTGRES_USER: root
@@ -19,6 +19,6 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - db 
+      - postgres
     stdin_open: true
     tty: true
