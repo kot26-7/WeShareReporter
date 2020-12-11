@@ -1,4 +1,3 @@
-
 version: 2.1
 jobs:
   rspec:
@@ -28,6 +27,7 @@ jobs:
       - run:
           name: yarn Install
           command: |
+            docker-compose exec web bash -c 'yarn install'
             docker-compose exec web bash -c 'bundle exec bin/webpack'
       - run:
           name: Run rspec
