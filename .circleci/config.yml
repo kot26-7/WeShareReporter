@@ -16,7 +16,6 @@ jobs:
           name: Start containers
           command: |
             set -x
-            docker-compose run web bash -c 'yarn install'
             docker-compose up -d
       - run:
          name: wait for db
@@ -24,8 +23,6 @@ jobs:
       - run:
           name: Setup database
           command: |
-            docker-compose logs
-            docker-compose ps -a
             docker-compose exec web bash -c 'bundle exec rails db:create'
             docker-compose exec web bash -c 'bundle exec rails db:migrate'
       - run:
