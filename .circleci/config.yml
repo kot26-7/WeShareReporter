@@ -24,7 +24,6 @@ jobs:
           name: Setup database
           command: |
             docker-compose ps -a
-            docker-compose run web bash -c 'yarn update'
             docker-compose exec web bash -c 'bundle exec rails db:create'
             docker-compose exec web bash -c 'bundle exec rails db:migrate'
       - run:
