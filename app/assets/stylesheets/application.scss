@@ -13,3 +13,13 @@
  *= require_tree .
  *= require_self
  */
+@import "materialize-css/dist/css/materialize";
+
+/** Home-index **/
+.carousel {
+  height: 100vh;
+  .carousel-fixed-item {
+    bottom: 0;
+    top: 80px;
+  }
+}
