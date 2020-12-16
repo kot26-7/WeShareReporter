@@ -29,5 +29,6 @@ module Myapp
     config.generators.javascripts    = false
     config.generators.helper         = false
     config.autoload_paths += %W(#{config.root}/lib)
+    config.i18n.default_locale = :ja
   end
 end
