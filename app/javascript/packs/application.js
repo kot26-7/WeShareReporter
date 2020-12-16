@@ -18,13 +18,12 @@ import 'materialize-css/dist/js/materialize'
 // const imagePath = (name) => images(name, true)
 
 // Header sidebar
-$(document).ready(function(){
+$(function(){
+  // Header sidebar
   $('.sidenav').sidenav({
     edge: 'right',
   });
-});
-// Carousel in main top page
-$(document).ready(function(){
+  // Carousel in main top page
   $('.carousel').carousel();
   $('.carousel.carousel-slider').carousel({
     fullWidth: true,
@@ -36,4 +35,11 @@ $(document).ready(function(){
     autoplay: true,
     setTimeout(autoplay, 7500);
   }
+  // Icon to go to the top
+  $('#top-icon').on('click',function(event){
+    $('body, html').animate({
+      scrollTop:0
+    }, 800);
+    event.preventDefault();
+  });
 });

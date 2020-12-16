@@ -60,6 +60,25 @@ header {
     margin: 15px;
   }
 }
+/** Footer **/
+footer {
+  min-height: 100px;
+  background-color: rgba(214, 219, 223, 0.5);
+  .footer-links {
+    padding: 10px;
+    #main-links {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+/** icon to the top **/
+#top-icon {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  cursor: pointer;
+}
 /** Home-index **/
 .carousel {
   height: 100vh;
