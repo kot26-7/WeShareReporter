@@ -16,6 +16,14 @@ import 'materialize-css/dist/js/materialize'
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+// Header sidebar
+$(document).ready(function(){
+  $('.sidenav').sidenav({
+    edge: 'right',
+  });
+});
+// Carousel in main top page
 $(document).ready(function(){
   $('.carousel').carousel();
   $('.carousel.carousel-slider').carousel({

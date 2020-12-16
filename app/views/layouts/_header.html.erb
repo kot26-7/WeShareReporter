@@ -1,0 +1,11 @@
+<header>
+  <div id="header-logo">
+    <%= link_to root_path do %>
+      <%= image_tag 'ws-reporters_logo.jpg', height: '75' %>
+    <% end %>
+  </div>
+  <div id="header-main">
+    <i class="medium material-icons sidenav-trigger" data-target="slide-out">apps</i>
+  </div>
+  <%= render 'layouts/sidebar' %>
+</header>
