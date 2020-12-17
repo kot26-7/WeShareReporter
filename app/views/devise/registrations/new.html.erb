@@ -1,12 +1,13 @@
-
+<script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
 <div class="container">
   <div class="row">
     <h2>新規登録</h2>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), class: "col s12") do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "h-adr" }) do |f| %>
+      <span class="p-country-name" style="display: none;">Japan</span>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="input-field col s12">
+      <div class="input-field col s12 l6">
         <i class="material-icons prefix">account_circle</i>
         <%= f.email_field :username, autofocus: true, autocomplete: "username", class: "validate" %>
         <%= f.label :username %>
@@ -15,10 +16,36 @@
         </span>
       </div>
 
-      <div class="input-field col s12">
+      <div class="input-field col s12 l6">
         <i class="material-icons prefix">email</i>
         <%= f.email_field :email, autocomplete: "email", class: "validate" %>
         <%= f.label :email %>
+      </div>
+
+      <div class="input-field col s12">
+        <i class="material-icons prefix">assistant_photo</i>
+        <%= f.text_field :postal_code, autocomplete: "postal_code", class: "validate p-postal-code" %>
+        <%= f.label :postal_code %>
+        <span class="helper-text">
+          ハイフンなし７桁の数字
+        </span>
+      </div>
+
+      <div class="input-field col s12 m6">
+        <i class="material-icons prefix">public</i>
+        <%= f.text_field :prefecture_code, placeholder: "都道府県", autocomplete: "prefecture_code", class: "validate p-region", disabled: true %>
+      </div>
+
+      <div class="input-field col s12 m6">
+        <i class="material-icons prefix">place</i>
+        <%= f.text_field :city, placeholder: "市区町村", autocomplete: "city", class: "validate p-locality", disabled: true %>
+      </div>
+
+      <div class="input-field col s12">
+        <i class="material-icons prefix">add_circle</i>
+        <%= f.text_field :other_address, autocomplete: "other_address", class: "validate" %>
+        <%= f.label :other_address %>
+        <span class="helper-text">任意</span>
       </div>
 
       <div class="input-field col s12">
