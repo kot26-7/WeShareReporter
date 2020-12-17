@@ -19,6 +19,8 @@ html {
   font-family: 'Lato', 'Noto Sans JP', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
 }
 body {
+  min-height: 100vh;
+  position: relative;
   background:
     linear-gradient(135deg, #f7f7f4 25%, transparent 25%) -45px 0,
     linear-gradient(225deg, #f7f7f4 25%, transparent 25%) -45px 0,
@@ -62,6 +64,9 @@ header {
 }
 /** Footer **/
 footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   min-height: 100px;
   background-color: rgba(214, 219, 223, 0.5);
   .footer-links {
