@@ -4,7 +4,9 @@
   <body>
     <%= render 'layouts/header' %>
     <%= render 'layouts/flash' %>
-    <%= yield %>
+    <div id="main-wrap">
+      <%= yield %>
+    </div>
     <%= render 'layouts/footer' %>
     <span id="top-icon">
       <%= image_tag 'top_arrow.png', height: '50' %>
