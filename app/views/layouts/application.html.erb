@@ -3,7 +3,10 @@
   <%= render 'layouts/head' %>
   <body>
     <%= render 'layouts/header' %>
-    <%= yield %>
+    <%= render 'layouts/flash' %>
+    <div id="main-wrap">
+      <%= yield %>
+    </div>
     <%= render 'layouts/footer' %>
     <span id="top-icon">
       <%= image_tag 'top_arrow.png', height: '50' %>

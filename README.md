@@ -1,24 +1,24 @@
-# README
+# WeShareReporter(現在開発中)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+TipsGetherは、天気に特化したSNS型WEBアプリケーションです。
 
-Things you may want to cover:
+## :globe_with_meridians: APP URL
+### **https://ws-repo-kot26.herokuapp.com/**
 
-* Ruby version
 
-* System dependencies
+## :wrench: 使用方法
 
-* Configuration
+## :book: 実装している機能及びテスト
 
-* Database creation
+- レスポンシブWebデザイン
+- ユーザー登録、ログイン機能(devise gem)
 
-* Database initialization
+- Rspec
+    - Helpers: ヘルパーメソッドのテスト
+    - Models: 各モデルのテスト
+    - Requests: 各コントローラーのアクションの稼働テスト
+    - System: ブラウザ上での統合テスト
 
-* How to run the test suite
+- Rubocop
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+`git push` 時に Rspec と Rubocop が行われ、成功した場合にのみ Heroku にデプロイされます。

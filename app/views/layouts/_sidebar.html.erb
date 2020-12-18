@@ -1,10 +1,22 @@
 <ul id="slide-out" class="sidenav">
   <li id="sidebar-close"><i class="material-icons sidenav-close">close</i></li>
-  <li><a class="waves-effect" href="#">Home</a></li>
+  <li>
+    <%= link_to "Home", root_path, class: "waves-effect" %>
+  </li>
   <li><a class="waves-effect" href="#">About</a></li>
   <li><div class="divider"></div></li>
   <li><a class="subheader"><i class="material-icons">people</i>ユーザー向け</a></li>
-  <li><a class="waves-effect" href="#">新規登録</a></li>
-  <li><a class="waves-effect" href="#">ログイン</a></li>
-  <li><a class="waves-effect" href="#">ゲストログイン(閲覧用)</a></li>
+  <% if user_signed_in? %>
+    <li>
+      <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, data: { confirm: 'ログアウトしますか?' }, class: "waves-effect" %>
+    </li>
+  <% else %>
+    <li>
+      <%= link_to "新規登録", new_user_registration_path, class: "waves-effect" %>
+    </li>
+    <li>
+      <%= link_to "ログイン", new_user_session_path, class: "waves-effect" %>
+    </li>
+    <li><a class="waves-effect" href="#">ゲストログイン(閲覧用)</a></li>
+  <% end %>
 </ul>
