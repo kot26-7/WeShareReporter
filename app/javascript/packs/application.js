@@ -42,4 +42,9 @@ $(function(){
     }, 800);
     event.preventDefault();
   });
+  // Flash msg
+  setTimeout("$('.flash').fadeOut('slow')", 4000);
+  $(".flash-cls-icon").on("click",function(){
+    $(".flash").fadeOut("slow");
+  });
 });
