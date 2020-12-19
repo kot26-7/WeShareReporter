@@ -26,6 +26,8 @@ ja:
             postal_code:
               blank: "が入力されていません。"
               invalid: "は有効でありません。"
+              not_a_number: "は数字のみ入力してください。"
+              wrong_length: "は7桁の数を入力してください。"
             prefecture_code:
               blank: "が入力されていません。"
               invalid: "は有効でありません。"
