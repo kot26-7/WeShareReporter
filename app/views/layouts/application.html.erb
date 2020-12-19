@@ -2,8 +2,8 @@
 <html>
   <%= render 'layouts/head' %>
   <body>
-    <%= render 'layouts/header' %>
     <%= render 'layouts/flash' %>
+    <%= render 'layouts/header' %>
     <div id="main-wrap">
       <%= yield %>
     </div>
@@ -13,4 +13,5 @@
     </span>
   </body>
   <%= javascript_pack_tag 'application' %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
 </html>
